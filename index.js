@@ -127,15 +127,7 @@ app.get('/register_commands', async (req,res) =>{
     },
 	{
       "name": "GetJob",
-      "description": "Get information about a job",
-      "options": [
-        {
-          "name": "job_id",
-          "description": "ID of the job",
-          "type": 3, 
-          "required": true
-        }
-      ]
+      "description": "Get information about a job"
     }
   ]
   try
