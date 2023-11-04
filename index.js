@@ -83,6 +83,18 @@ app.get('/register_commands', async (req,res) =>{
       "name": "dm",
       "description": "sends user a DM",
       "options": []
+    },
+	{
+      "name": "GetJob",
+      "description": "Get information about a job",
+      "options": [
+        {
+          "name": "job_id",
+          "description": "ID of the job",
+          "type": 3, // 3 represents String type, you can change it based on your use case
+          "required": true
+        }
+      ]
     }
   ]
   try
