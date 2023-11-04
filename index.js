@@ -66,6 +66,45 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
         }
       });
     }
+
+    if (interaction.data.name === 'GetJob') {
+      // Fetch job listings using the "finn-jobb" package
+      try {
+        const jobs = await getJobs({
+          getFinnJobs: true
+        });
+
+        // Prepare the job information to send in the response
+        const jobInfo = jobs.map((job, index) => {
+          return {
+            name: `Job ${index + 1}`,
+            value: `Title: ${job.title}\nCompany: ${job.company}\nLocation: ${job.location}\nURL: ${job.url}`,
+          };
+        });
+
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: `Here are some job listings:`,
+            embeds: [
+              {
+                title: 'Job Listings',
+                fields: jobInfo,
+              },
+            ],
+          },
+        });
+      } catch (error) {
+        console.error(error);
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: 'An error occurred while fetching job listings.',
+          },
+        });
+      }
+    }
+
   }
 
 });
@@ -91,7 +130,7 @@ app.get('/register_commands', async (req,res) =>{
         {
           "name": "job_id",
           "description": "ID of the job",
-          "type": 3, // 3 represents String type, you can change it based on your use case
+          "type": 3, 
           "required": true
         }
       ]
