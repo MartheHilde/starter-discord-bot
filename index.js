@@ -73,7 +73,8 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       // Fetch job listings using the "finn-jobb" package
       try {
         const jobs = await getJobs({
-          getFinnJobs: true
+          getFinnJobs: true,
+          getKode24Jobs: false
         });
 
         // Prepare the job information to send in the response
