@@ -69,7 +69,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       });
     }
 
-    if (interaction.data.name === 'GetJob') {
+    if (interaction.data.name === 'getFinnjob') {
       // Fetch job listings using the "finn-jobb" package
       try {
         const jobs = await getJobs({
@@ -126,7 +126,7 @@ app.get('/register_commands', async (req,res) =>{
       "options": []
     },
 	{
-      "name": "GetJob",
+      "name": "getFinnjob",
       "description": "Get information about a job"
     }
   ]
