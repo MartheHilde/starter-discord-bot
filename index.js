@@ -31,7 +31,7 @@ const discord_api = axios.create({
 
 
 
-app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
+app.put('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
   const interaction = req.body;
 
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
@@ -115,7 +115,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 
 
 // app.get('/register_commands', async (req,res) =>{
-  app.post('/register_commands', async (req, res) => {
+  app.put('/register_commands', async (req, res) => {
     let slash_commands = [
       {
         "name": "yo",
@@ -133,24 +133,24 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
         "options": []
       }
     ];
-  
-    try {
       // api docs - https://discord.com/developers/docs/interactions/application-commands#create-global-application-command
-      const discord_response = await discord_api.post(
-        `/applications/${APPLICATION_ID}/commands`,
-        slash_commands
-      );
-  
-      console.log(discord_response.data);
-      return res.send('commands have been registered');
-    } catch (e) {
-      console.error(e.code);
-      console.error(e.response?.data);
-  
-      
-  return res.send(`${e.code} error from discord`);
-    }
-  });
+      try {
+        const discord_response = await discord_api.post(
+          `/applications/${APPLICATION_ID}/commands`,
+          slash_commands
+        );
+    
+        console.log(discord_response.data);
+        return res.send('commands have been registered');
+      } catch (e) {
+        console.error(e.code);
+        console.error(e.response?.data);
+    
+        
+    return res.send(`${e.code} error from discord`);
+      }
+    });
+    
 
 
 app.get('/', async (req,res) =>{
