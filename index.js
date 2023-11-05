@@ -69,12 +69,12 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       });
     }
 
-    if (interaction.data.name === 'getFinnjob') {
+    if (interaction.data.name === 'jobb') {
       // Fetch job listings using the "finn-jobb" package
       try {
         const jobs = await getJobs({
           getFinnJobs: true,
-          getKode24Jobs: false
+          getKode24Jobs: false,
         });
 
         // Prepare the job information to send in the response
@@ -114,39 +114,43 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 
 
 
-app.get('/register_commands', async (req,res) =>{
-  let slash_commands = [
-    {
-      "name": "yo",
-      "description": "replies with Yo!",
-      "options": []
-    },
-    {
-      "name": "dm",
-      "description": "sends user a DM",
-      "options": []
-    },
-	{
-      "name": "getFinnjob",
-      "description": "Get information about a job",
-      "options": []
+// app.get('/register_commands', async (req,res) =>{
+  app.post('/register_commands', async (req, res) => {
+    let slash_commands = [
+      {
+        "name": "yo",
+        "description": "replies with Yo!",
+        "options": []
+      },
+      {
+        "name": "dm",
+        "description": "sends user a DM",
+        "options": []
+      },
+      {
+        "name": "jobb",
+        "description": "Get information about a job",
+        "options": []
+      }
+    ];
+  
+    try {
+      // api docs - https://discord.com/developers/docs/interactions/application-commands#create-global-application-command
+      const discord_response = await discord_api.post(
+        `/applications/${APPLICATION_ID}/commands`,
+        slash_commands
+      );
+  
+      console.log(discord_response.data);
+      return res.send('commands have been registered');
+    } catch (e) {
+      console.error(e.code);
+      console.error(e.response?.data);
+  
+      
+  return res.send(`${e.code} error from discord`);
     }
-  ]
-  try
-  {
-    // api docs - https://discord.com/developers/docs/interactions/application-commands#create-global-application-command
-    let discord_response = await discord_api.put(
-      `/applications/${APPLICATION_ID}/guilds/${GUILD_ID}/commands`,
-      slash_commands
-    )
-    console.log(discord_response.data)
-    return res.send('commands have been registered')
-  }catch(e){
-    console.error(e.code)
-    console.error(e.response?.data)
-    return res.send(`${e.code} error from discord`)
-  }
-})
+  });
 
 
 app.get('/', async (req,res) =>{
