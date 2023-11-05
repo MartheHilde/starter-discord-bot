@@ -31,7 +31,7 @@ const discord_api = axios.create({
 
 
 
-app.put('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
+app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
   const interaction = req.body;
 
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
@@ -115,7 +115,7 @@ app.put('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 
 
 // app.get('/register_commands', async (req,res) =>{
-  app.put('/register_commands', async (req, res) => {
+  app.get('/register_commands', async (req, res) => {
     let slash_commands = [
       {
         "name": "yo",
